@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الضمان الاختياري | المساعد الذكي للتقاعد</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070d1a;
+  --bg2: #0c1525;
+  --bg3: #111e35;
+  --bg4: #172340;
+  --blue: #2563eb;
+  --blue2: #3b82f6;
+  --blue3: #60a5fa;
+  --gold: #d97706;
+  --gold2: #f59e0b;
+  --gold3: #fbbf24;
+  --green: #16a34a;
+  --red: #dc2626;
+  --txt: #e8f0ff;
+  --txt2: #94a3b8;
+  --txt3: #4a5a72;
+  --border: rgba(59,130,246,0.12);
+  --border2: rgba(59,130,246,0.3);
+  --sw: 270px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Tajawal',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  display:flex;
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* ===== SIDEBAR ===== */
+.sb{
+  width:var(--sw);
+  min-width:var(--sw);
+  background:var(--bg2);
+  border-left:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  overflow:hidden;
+  transition:transform .3s;
+  z-index:20;
+  flex-shrink:0;
+}
+.sb-head{padding:18px 14px 14px;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.logo-ico{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,var(--blue),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(37,99,235,.35);
+}
+.logo-txt{font-weight:800;font-size:13.5px;line-height:1.3}
+.logo-txt small{display:block;font-size:11px;font-weight:400;color:var(--blue3);margin-top:1px}
+.new-btn{
+  width:100%;padding:9px 12px;
+  background:transparent;border:1px solid var(--border2);border-radius:9px;
+  color:var(--txt);font-family:inherit;font-size:13px;cursor:pointer;
+  display:flex;align-items:center;gap:7px;transition:.2s;
+}
+.new-btn:hover{background:var(--bg3);border-color:var(--blue2);color:var(--blue3)}
+.sb-sec{padding:10px 14px 5px;font-size:10.5px;color:var(--txt3);font-weight:700;letter-spacing:.06em}
+.hist{flex:1;overflow-y:auto;padding:4px 7px}
+.hist::-webkit-scrollbar{width:3px}
+.hist::-webkit-scrollbar-thumb{background:var(--txt3);border-radius:2px}
+.hi{
+  padding:8px 10px;border-radius:8px;cursor:pointer;
+  font-size:12.5px;color:var(--txt2);
+  display:flex;align-items:center;gap:7px;
+  transition:.18s;margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.hi:hover{background:var(--bg3);color:var(--txt)}
+.hi.on{background:rgba(59,130,246,.1);color:var(--blue3)}
+.sb-foot{padding:12px 14px;border-top:1px solid var(--border)}
+.uinfo{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px}
+.uava{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#1e3a5f,var(--blue2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.uname{font-size:12.5px;color:var(--txt2)}
+
+/* ===== MAIN ===== */
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;position:relative}
+.topbar{
+  padding:13px 22px;
+  background:rgba(7,13,26,.85);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.tb-left{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px}
+.dot{width:7px;height:7px;background:#22c55e;border-radius:50%;box-shadow:0 0 7px #22c55e;animation:pdot 2s infinite}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:.4}}
+.tb-right{display:flex;gap:7px}
+.ibtn{
+  width:34px;height:34px;border-radius:8px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--txt2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;transition:.18s;
+}
+.ibtn:hover{background:var(--bg3);color:var(--txt)}
+.menu-tog{display:none}
+
+/* ===== MESSAGES ===== */
+.msgs{
+  flex:1;overflow-y:auto;
+  padding:22px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.msgs::-webkit-scrollbar{width:4px}
+.msgs::-webkit-scrollbar-thumb{background:var(--txt3);border-radius:2px}
+
+/* Welcome */
+.welcome{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:30px 16px;gap:20px;
+  animation:fup .55s ease;
+}
+@keyframes fup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.w-ico{
+  width:76px;height:76px;border-radius:22px;
+  background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(217,119,6,.12));
+  border:1px solid rgba(59,130,246,.25);
+  display:flex;align-items:center;justify-content:center;font-size:34px;
+  box-shadow:0 6px 28px rgba(37,99,235,.12);
+}
+.w-title{
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#e8f0ff 0%,var(--blue3) 50%,var(--gold3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.w-sub{font-size:13.5px;color:var(--txt2);max-width:480px;line-height:1.75}
+.sug-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;max-width:550px;width:100%}
+.sug{
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:12px 13px;cursor:pointer;text-align:right;
+  display:flex;gap:9px;align-items:flex-start;transition:.22s;
+}
+.sug:hover{border-color:var(--blue2);background:rgba(59,130,246,.07);transform:translateY(-1px)}
+.si{font-size:19px;flex-shrink:0;margin-top:1px}
+.st strong{display:block;color:var(--txt);font-size:12.5px;margin-bottom:2px;font-weight:700}
+.st{font-size:12px;color:var(--txt2);line-height:1.5}
+
+/* Bubbles */
+.mrow{display:flex;gap:11px;animation:min .28s ease}
+.mrow.user{flex-direction:row-reverse}
+@keyframes min{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.ava{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;margin-top:2px;
+}
+.ava.bot{background:linear-gradient(135deg,#1e3a5f,#1d4ed8);border:1px solid rgba(59,130,246,.35)}
+.ava.user{background:linear-gradient(135deg,#1e3a5f,var(--blue2))}
+.bub{max-width:73%;padding:13px 17px;border-radius:15px;font-size:13.5px;line-height:1.8}
+.bub.bot{background:var(--bg3);border:1px solid var(--border);border-top-right-radius:4px;color:var(--txt)}
+.bub.user{background:linear-gradient(135deg,#1e40af,var(--blue2));border-top-left-radius:4px;color:#fff}
+.btime{font-size:10px;color:var(--txt3);margin-top:3px;text-align:left}
+.mrow.user .btime{text-align:right}
+
+/* Typing */
+.typing{display:flex;align-items:center;gap:5px;padding:13px 17px}
+.typing span{width:6px;height:6px;background:var(--blue3);border-radius:50%;animation:bounce 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* Tags */
+.tag{
+  display:inline-block;padding:2px 9px;border-radius:20px;
+  font-size:11px;font-weight:700;margin-bottom:8px;
+  background:rgba(217,119,6,.14);color:var(--gold3);
+  border:1px solid rgba(245,158,11,.28);
+}
+.disc{
+  margin-top:11px;padding:8px 12px;
+  background:rgba(217,119,6,.05);
+  border:1px solid rgba(245,158,11,.14);
+  border-radius:8px;font-size:11.5px;
+  color:rgba(251,191,36,.55);
+  display:flex;gap:6px;align-items:flex-start;
+}
+a.lnk{color:var(--blue3);text-decoration:none}
+a.lnk:hover{text-decoration:underline}
+
+/* File chips */
+.fp{display:flex;flex-wrap:wrap;gap:7px;padding:7px 22px 0;flex-shrink:0}
+.chip{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:7px;padding:5px 9px;
+  display:flex;align-items:center;gap:6px;
+  font-size:11.5px;color:var(--txt2);
+}
+.chip button{
+  width:15px;height:15px;border-radius:50%;
+  background:var(--txt3);color:#fff;border:none;
+  cursor:pointer;font-size:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* Input */
+.inp-area{
+  padding:14px 22px 18px;
+  background:rgba(7,13,26,.88);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+.inp-wrap{
+  background:var(--bg4);border:1px solid var(--border);
+  border-radius:13px;display:flex;align-items:flex-end;
+  gap:7px;padding:9px 11px;transition:.2s;
+}
+.inp-wrap:focus-within{border-color:var(--border2);box-shadow:0 0 0 3px rgba(37,99,235,.07)}
+.inp-actions{display:flex;gap:4px;align-items:center;flex-shrink:0;padding-bottom:2px}
+.att{
+  width:32px;height:32px;border:none;background:transparent;
+  color:var(--txt3);cursor:pointer;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;transition:.18s;position:relative;
+}
+.att:hover{background:var(--bg3);color:var(--blue3)}
+.att input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.msgi{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--txt);font-family:inherit;font-size:13.5px;
+  resize:none;max-height:130px;min-height:22px;
+  line-height:1.6;direction:rtl;
+}
+.msgi::placeholder{color:var(--txt3)}
+.send{
+  width:36px;height:36px;border-radius:9px;
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  border:none;color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:.18s;
+  box-shadow:0 4px 12px rgba(37,99,235,.3);font-size:16px;
+}
+.send:hover{transform:scale(1.06);box-shadow:0 6px 16px rgba(37,99,235,.4)}
+.send:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.hint{text-align:center;font-size:11px;color:var(--txt3);margin-top:7px}
+
+/* Overlay */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:15;backdrop-filter:blur(2px)}
+
+/* Responsive */
+@media(max-width:768px){
+  .sb{position:fixed;top:0;right:0;bottom:0;transform:translateX(100%)}
+  .sb.open{transform:translateX(0)}
+  .menu-tog{display:flex!important}
+  .sug-grid{grid-template-columns:1fr}
+  .bub{max-width:90%}
+  .msgs{padding:14px}
+  .inp-area{padding:10px 14px 14px}
+  .topbar{padding:11px 14px}
+  .ov{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sb" id="sb">
+  <div class="sb-head">
+    <div class="logo">
+      <div class="logo-ico">🛡️</div>
+      <div class="logo-txt">الضمان الاختياري<small>استشارات تقاعدية ذكية · قانون رقم 18 / 2023</small></div>
+    </div>
+    <button class="new-btn" onclick="newChat()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      محادثة جديدة
+    </button>
+  </div>
+  <div class="sb-sec">المحادثات الأخيرة</div>
+  <div class="hist" id="hist">
+    <div class="hi on" onclick="loadChat(this)">📌 شروط الاشتراك الاختياري</div>
+    <div class="hi" onclick="loadChat(this)">📌 نسب الاشتراك والدفع</div>
+    <div class="hi" onclick="loadChat(this)">📌 سن التقاعد وشروطه</div>
+    <div class="hi" onclick="loadChat(this)">📌 حقوق الورثة عند الوفاة</div>
+  </div>
+  <div class="sb-foot">
+    <div class="uinfo"><div class="uava">🇮🇶</div><div class="uname">مستفيد · عراقي</div></div>
+  </div>
+</aside>
+
+<div class="ov" id="ov" onclick="toggleSB()"></div>
+
+<!-- Main -->
+<main class="main">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="ibtn menu-tog" onclick="toggleSB()">☰</button>
+      <div class="dot"></div>
+      مساعد الضمان الاختياري
+    </div>
+    <div class="tb-right">
+      <button class="ibtn" onclick="newChat()" title="محادثة جديدة">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.44"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="msgs" id="msgs">
+    <div class="welcome" id="ws">
+      <div class="w-ico">⚖️</div>
+      <h1 class="w-title">الضمان الاختياري | المساعد الذكي</h1>
+      <p class="w-sub">اسأل عن أي شيء: شروط التسجيل، نسب الاشتراك، سن التقاعد، حقوق الورثة، وكيفية الدفع. الإجابة وفق قانون الضمان الاجتماعي رقم 18 لسنة 2023.</p>
+      <div class="sug-grid">
+        <div class="sug" onclick="ask('ما هي شروط الانضمام إلى التقاعد والضمان الاختياري؟')"><div class="si">📋</div><div class="st"><strong>شروط الاشتراك</strong>من يحق له التسجيل وما هي الشروط؟</div></div>
+        <div class="sug" onclick="ask('كم نسبة الاشتراك ومن يتحملها؟')"><div class="si">💰</div><div class="st"><strong>نسبة الاشتراك</strong>كم تدفع وما هي مساهمة الدولة؟</div></div>
+        <div class="sug" onclick="ask('متى أستحق التقاعد حسب القانون؟')"><div class="si">📅</div><div class="st"><strong>سن التقاعد</strong>الشروط التفصيلية للرجال والنساء</div></div>
+        <div class="sug" onclick="ask('من يستحق راتب المتوفى من الورثة؟')"><div class="si">👨‍👩‍👧</div><div class="st"><strong>حقوق الورثة</strong>من يرث الراتب التقاعدي عند الوفاة؟</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fp" id="fp"></div>
+
+  <div class="inp-area">
+    <div class="inp-wrap">
+      <div class="inp-actions">
+        <label class="att" title="إرفاق ملف">
+          📎
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png,.txt" onchange="attachFile(event)" multiple>
+        </label>
+      </div>
+      <textarea class="msgi" id="mi" placeholder="اكتب سؤالك هنا..." rows="1" onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+      <button class="send" id="sb2" onclick="send()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="hint">⚡ يعتمد على قانون الضمان الاجتماعي رقم 18 لسنة 2023 · الردود للاسترشاد فقط</div>
+  </div>
+</main>
+
+<script>
+// ═══════════════════════════════════════════
+// قاعدة البيانات — 44 سؤال وجواب
+// ═══════════════════════════════════════════
+const DB = [
+  {
+    kw:["شروط الانضمام","شروط الاشتراك","من يحق له","كيف اشترك","شروط التسجيل","شروط الانضمام"],
+    ans:`<span class="tag">✅ شروط الانضمام للضمان الاختياري</span>
+وفق قانون الضمان الاجتماعي رقم 18 لسنة 2023:<br><br>
+<strong>1.</strong> أن يكون المشترك سليمًا صحيًا (قادر على العمل).<br>
+<strong>2.</strong> لا يستلم راتبًا من الدولة بجميع أنواعه، <em>باستثناء الحصة التقاعدية لذوي الشهداء.</em><br>
+<strong>3.</strong> العمر من <strong>15 إلى 50 سنة</strong>، ويُستثنى من شرط العمر من لديه خدمة لا تقل عن 3 سنوات (وظيفية مدنية أو خدمة مضمونة).<br>
+<strong>4.</strong> أن يكون عراقيًا.`
+  },
+  {
+    kw:["كيفية الاشتراك","طريقة الدفع","كيفية الدفع","أدفع الاشتراك","دفع الكتروني","ماستر","فيزا","كيف اشترك","طريقة الاشتراك"],
+    ans:`<span class="tag">💳 كيفية الاشتراك وطريقة الدفع</span>
+التقديم إلكترونيًا عبر موقع المنظومة، والدفع عبر بطاقات الدفع الإلكتروني (ماستركارد / فيزا).<br><br>
+🎬 <a class="lnk" href="https://www.facebook.com/share/v/19S3FiEaPF/" target="_blank">طريقة الاشتراك في الضمان الاختياري (فيديو)</a><br>
+🔗 <a class="lnk" href="https://www.user.rss.gov.iq/login" target="_blank">رابط التقديم على الضمان الاختياري</a><br>
+🎬 <a class="lnk" href="https://www.facebook.com/share/r/1A9cQZbCFM/" target="_blank">طريقة دفع الاشتراك (فيديو)</a><br>
+🎬 <a class="lnk" href="https://www.facebook.com/share/v/16e9YUmjBR/" target="_blank">كيفية إضافة معلومات بطاقة الدفع (فيديو)</a>`
+  },
+  {
+    kw:["اثبات","وصل","وصل دفع","هل احصل"],
+    ans:`<span class="tag">🧾 إثبات الدفع</span>
+نعم، يوجد <strong>وصل رسمي</strong> بعد كل عملية دفع يحتوي على جميع المعلومات المهمة: رقم الضمان، اسمك، الفئة، ومبلغ الاشتراك.`
+  },
+  {
+    kw:["متطلبات التقديم","متطلبات","ماذا احتاج للتقديم","وثائق التقديم"],
+    ans:`<span class="tag">📄 متطلبات التقديم</span>
+• صورة شخصية حديثة.<br>
+• صورة البطاقة الوطنية (وجه + ظهر).<br>
+• معلومات السكن وباقي التفاصيل البسيطة.`
+  },
+  {
+    kw:["فئات الاشتراك","كم فئة","الفئات","15 فئة","فئة ماذا"],
+    ans:`<span class="tag">📁 فئات الاشتراك (15 فئة)</span>
+يوجد <strong>15 فئة</strong> تمثل الدخل الشهري. المشترك يدفع <strong>5%</strong> من الفئة المختارة، والدولة تساهم بـ <strong>15%</strong>.<br><br>
+📊 <a class="lnk" href="https://drive.google.com/file/d/1hHNrijHkCNoxCNfdCQmFUuBz8rzqbu4J/view" target="_blank">رابط جدول فئات الاشتراك</a>`
+  },
+  {
+    kw:["كيف أختار فئة","اختيار الفئة","أي فئة أختار","افضل فئة"],
+    ans:`<span class="tag">🎯 كيف تختار فئة الاشتراك؟</span>
+الراتب التقاعدي يُحسب على <strong>متوسط الأجر لآخر 5 سنوات</strong>.<br><br>
+✅ <strong>الأفضل:</strong> ابدأ بفئة منخفضة وغيّرها تدريجيًا مع مرور الوقت حتى تصل إلى سن التقاعد، وبهذه الطريقة تقلل التكلفة الكلية مع رفع الراتب التقاعدي.`
+  },
+  {
+    kw:["تغيير فئة","متى يحق تغيير","12 شهر","تغيير بعد"],
+    ans:`<span class="tag">🔄 تغيير فئة الاشتراك</span>
+يحق تغيير فئة الاشتراك بعد مرور <strong>12 شهرًا</strong> من الدفع، ويكون التغيير <strong>بالتدرج</strong> من الفئة الأولى إلى الثانية وهكذا.`
+  },
+  {
+    kw:["قدمت ولم أسدد","لم أدفع بعد","قبل الدفع","قبل السداد"],
+    ans:`<span class="tag">✏️ تغيير الفئة قبل الدفع</span>
+نعم، يمكنك تغيير الفئة قبل الدفع عن طريق مراسلة:<br>
+📩 <a class="lnk" href="https://www.facebook.com/share/18yT12fHQZ/" target="_blank">صفحة المنظومة على الفيسبوك</a>`
+  },
+  {
+    kw:["فئة عالية ودفعت","النزول بالفئة","أنزل الفئة","نزول فئة"],
+    ans:`<span class="tag">❌ النزول في الفئة بعد الدفع</span>
+<strong>لا</strong>، لا يمكنك النزول إلى فئة أقل بعد أن تكون قد دفعت الاشتراك.`
+  },
+  {
+    kw:["حذف الاشتراك","إلغاء الاشتراك","شطب الحساب","كيف أحذف"],
+    ans:`<span class="tag">🗑️ حذف الاشتراك</span>
+اترك الحساب <strong>12 شهرًا</strong> بدون دفع، ثم تواصل مع صفحة المنظومة لحذف الحساب.`
+  },
+  {
+    kw:["مصير الأشهر","الأشهر المدفوعة","الخدمة بعد الحذف","حذفت الحساب"],
+    ans:`<span class="tag">📅 مصير الأشهر المدفوعة بعد الحذف</span>
+كل شهر مدفوع يُحتسب <strong>خدمة</strong> لك.<br><br>
+• عند التوظيف في القطاع الحكومي: تستفيد من الخدمة لأغراض العلاوة والترفيع والتقاعد.<br>
+• عند العمل في شركة مشمولة بالضمان: يمكنك إكمال الخدمة من حيث توقفت.`
+  },
+  {
+    kw:["حذفت الحساب وأريد العودة","العودة بعد الحذف","أعود للضمان","دمج الخدمة"],
+    ans:`<span class="tag">🔁 العودة بعد حذف الحساب</span>
+عند التقديم من جديد، وعند الوصول إلى حقل <em>"هل لديك خدمة مضمونة؟"</em> اختر <strong>"نعم"</strong> وأدخل رقم الضمان الموجود في وصل الدفع القديم، وسيتم دمج الخدمة السابقة إلكترونيًا.`
+  },
+  {
+    kw:["خدمة قديمة وأعمل عملًا حرًا","عمل حر","عمل مستقل"],
+    ans:`<span class="tag">💼 صاحب العمل الحر</span>
+نعم، يحق لك التقديم على الضمان الاختياري إذا كنت ضمن الشروط، وتستمر بالدفع حتى تصل إلى سن التقاعد.`
+  },
+  {
+    kw:["عمر أكثر من 50","أكثر من 50","فوق 50","الطلب قيد التدقيق","خدمة 3 سنوات"],
+    ans:`<span class="tag">⏳ التسجيل بعد سن 50</span>
+إذا كان عمرك أكثر من 50 ولديك خدمة حكومية مدنية لا تقل عن 3 سنوات:<br><br>
+يجب مراجعة <strong>قسم تكنولوجيا المعلومات</strong> في دائرة الضمان مع تأييد خدمة، وبعدها يُقبل طلبك.<br><br>
+⚠️ <em>ملاحظة: الموظف يدفع توقيفات تقاعدية عند إضافة الخدمة الوظيفية، وتُقسط هذه التوقيفات.</em>`
+  },
+  {
+    kw:["عمر أكثر من 50 وخدمة عسكرية","عسكرية تطوعية","عسكرية إلزامية","50 عسكري"],
+    ans:`<span class="tag">🎖️ الخدمة العسكرية وسن 50+</span>
+<strong>لا يحق لك التقديم مباشرة.</strong><br><br>
+✅ <strong>الحل:</strong> سجّل بأي مشروع أو شركة أو مكان مشمول بالضمان لمدة <strong>3 سنوات</strong>، وبعدها تستطيع الاشتراك بالضمان الاختياري.<br><br>
+⚠️ ملاحظة: عند إضافة الخدمة العسكرية لاحقًا تُحسب فروقات <strong>13%</strong> من الأجر الشهري عن كل شهر، وهذه الفروقات تُقسّط.`
+  },
+  {
+    kw:["خدمة عسكرية بعد 2003","عسكري بعد 2003","وزارة الدفاع","وزارة الداخلية"],
+    ans:`<span class="tag">🚫 الخدمة العسكرية بعد 2003</span>
+الخدمة العسكرية بعد عام <strong>2003</strong> لا تُضاف إلى الضمان، سواء كانت في <strong>وزارة الدفاع</strong> أو <strong>وزارة الداخلية</strong>.`
+  },
+  {
+    kw:["متى أستحق التقاعد","سن التقاعد","شروط التقاعد","عمر التقاعد"],
+    ans:`<span class="tag">🎂 شروط استحقاق التقاعد — المادة 29</span>
+<strong>للرجال:</strong><br>
+• عمر 63 سنة + خدمة 15 سنة<br>
+• عمر 60–62 سنة + خدمة 20 سنة<br>
+• عمر 50–59 سنة + خدمة 30 سنة<br><br>
+<strong>للنساء:</strong><br>
+• عمر 58 سنة + خدمة 15 سنة<br>
+• عمر 55–57 سنة + خدمة 20 سنة<br>
+• عمر 50–54 سنة + خدمة 25 سنة<br><br>
+<strong>مثال (رجل):</strong> علي اشترك بعمر 27 → يتقاعد بعمر 57 (خدمة 30 سنة).<br>
+<strong>مثال (امرأة):</strong> زينب اشتركت بعمر 28 → تتقاعد بعمر 53 (خدمة 25 سنة).`
+  },
+  {
+    kw:["شراء خدمة","شراء سنوات","اكمال الخدمة","نقص الخدمة"],
+    ans:`<span class="tag">🛒 شراء الخدمة الناقصة</span>
+نعم، بالشروط الآتية:<br>
+<strong>1.</strong> الحد الأعلى <strong>5 سنوات</strong>.<br>
+<strong>2.</strong> تسدد <strong>17%</strong> من متوسط الأجر لآخر 5 سنوات.<br>
+<strong>3.</strong> الشراء فقط لإكمال النقص <em>بعد بلوغ السن التقاعدي.</em><br><br>
+<strong>أمثلة — الرجل:</strong><br>
+• عمر 63 + خدمة 10–14 سنة → يحق الشراء<br>
+• عمر 60 + خدمة 15–19 سنة → يحق الشراء<br>
+• عمر 50 + خدمة 25–29 سنة → يحق الشراء<br><br>
+<strong>أمثلة — المرأة:</strong><br>
+• عمر 58 + خدمة 10–14 سنة → يحق الشراء<br>
+• عمر 55 + خدمة 15–19 سنة → يحق الشراء<br>
+• عمر 50 + خدمة 20–24 سنة → يحق الشراء<br><br>
+⚠️ أموال الشراء <strong>لا تُقسّط.</strong>`
+  },
+  {
+    kw:["راتب رعاية","رعاية اجتماعية","عندي رعاية"],
+    ans:`<span class="tag">⚠️ أصحاب راتب الرعاية الاجتماعية</span>
+<strong>لا يحق لك التقديم.</strong><br>
+إذا قدّمت، يتوقف راتب الرعاية الاجتماعية عنك.`
+  },
+  {
+    kw:["زوجتي تقدم","هل زوجتي تشترك","زوجة صاحب الرعاية"],
+    ans:`<span class="tag">👩 زوجة متقاضي راتب الرعاية</span>
+<strong>لا يحق لها التقديم</strong> ما دام زوجها يتقاضى راتب رعاية اجتماعية.`
+  },
+  {
+    kw:["ابني 18","ابن 18","ابن يتقدم","ابني يتقدم"],
+    ans:`<span class="tag">👦 ابن متقاضي الرعاية (18 سنة فأكثر)</span>
+<strong>نعم، يحق له التقديم</strong> إذا كان عمره 18 سنة أو أكثر.`
+  },
+  {
+    kw:["معين متفرغ","منتدب","متفرغ"],
+    ans:`<span class="tag">🚫 أصحاب راتب "معين متفرغ"</span>
+<strong>لا يحق لك التقديم</strong> على الضمان الاختياري.`
+  },
+  {
+    kw:["حصة تقاعدية وريث","وريث","حصة ورثة"],
+    ans:`<span class="tag">🚫 أصحاب الحصة التقاعدية كوريث</span>
+<strong>لا يحق لك التقديم</strong>، إلا إذا كنت من <strong>ذوي الشهداء</strong>.`
+  },
+  {
+    kw:["استثناء المرأة","المادة 31","3 أطفال","رعاية أطفال","استثناء سن"],
+    ans:`<span class="tag">👩‍👧‍👦 استثناء المرأة — المادة 31</span>
+بغض النظر عن العمر، تستحق المرأة التقاعد بتوافر:<br><br>
+<strong>أولاً:</strong> ألا تقل مدة خدمتها المضمونة عن <strong>15 سنة</strong>.<br>
+<strong>ثانيًا:</strong> ألا يقل عدد أطفالها عن <strong>3 أطفال</strong> لا يتجاوز عمر أي منهم 15 سنة.<br>
+<strong>ثالثًا:</strong> أن تنصرف لرعاية أطفالها.`
+  },
+  {
+    kw:["حصلت على تعيين حكومي","تعيين حكومي","وظيفة حكومية","عُيّنت"],
+    ans:`<span class="tag">🏛️ ماذا تفعل عند التعيين الحكومي؟</span>
+<strong>1.</strong> أوقف الدفع في الضمان الاختياري فورًا.<br>
+<strong>2.</strong> أبلغ منظومة الضمان بأنك حصلت على وظيفة حكومية.<br>
+<strong>3.</strong> انتظر <strong>سنة</strong> بعد التعيين لإضافة الخدمة، وفق المادة (14/أ) من قانون الخدمة المدنية رقم 24 لسنة 1960.`
+  },
+  {
+    kw:["تحتسب خدمة الضمان الاختياري","المادة 71","خدمة عند التعيين","علاوة ترفيع"],
+    ans:`<span class="tag">✅ احتساب خدمة الضمان عند التعيين — المادة 71</span>
+نعم، وفق المادة (71/ثانيًا):<br><br>
+<em>"تُحتسب خدمة المشترك في ضمان التقاعد الاختياري عند انتقاله إلى دوائر الدولة والقطاع العام خدمةً لأغراض العلاوة والترفيع والتقاعد."</em>`
+  },
+  {
+    kw:["تعينت في شركة","شركة ضمان","انتقلت لشركة","شركة خاصة"],
+    ans:`<span class="tag">🏢 الانتقال إلى شركة مشمولة بالضمان</span>
+<strong>1.</strong> أوقف دفع الاشتراك الاختياري.<br>
+<strong>2.</strong> أبلغ منظومة الضمان بذلك.<br>
+<strong>3.</strong> عند التعاقد مع الشركة، أعطِ رقم ضمانك الموجود في وصل الدفع لتكملة الخدمة.`
+  },
+  {
+    kw:["ما اشتركت","لم أدفع","ما دفعت","إذا ما دفعت","يصير إذا ما دفعت"],
+    ans:`<span class="tag">⚠️ ماذا يحدث إذا لم تسدد الاشتراك؟</span>
+نسبة الاشتراك الأصلية:<br>
+• المشترك يدفع <strong>5%</strong><br>
+• الدولة تتحمل <strong>15%</strong><br><br>
+إذا لم تسدد حتى نهاية السنة:<br>
+❌ تخسر مساهمة الدولة (15%)<br>
+❌ يصبح الاشتراك <strong>20%</strong> كاملًا عليك<br><br>
+<strong>مثال:</strong> مشترك بالفئة الأولى — بدل ما تدفع 17,500 دينار شهريًا، ستدفع 70,000 دينار.`
+  },
+  {
+    kw:["موظف حكومي يشتري خدمة","الموظف الحكومي","يشتري الموظف"],
+    ans:`<span class="tag">❌ شراء الخدمة للموظف الحكومي</span>
+حاليًا <strong>لا يستطيع</strong> الموظف الحكومي شراء الخدمة في الضمان الاختياري.`
+  },
+  {
+    kw:["راتب 1750000","راتب مليون وسبعمئة","اعلى راتب 1.750"],
+    ans:`<span class="tag">❓ راتب 1,750,000 دينار</span>
+حاليًا <strong>لا</strong>، أعلى راتب ممكن حاليًا في الضمان الاختياري هو <strong>1,400,000 دينار</strong>.`
+  },
+  {
+    kw:["شهرين فقط","توفيت أثناء الخدمة","حدث وفاة","وفاة أثناء التسديد"],
+    ans:`<span class="tag">🕊️ الوفاة أثناء الخدمة (شهرين أو أكثر)</span>
+<strong>نعم</strong>، بشرط أن تكون <strong>مستمرًا في تسديد الاشتراكات.</strong><br>
+يستحق الورثة راتبًا تقاعديًا بغض النظر عن العمر ومدة الخدمة.`
+  },
+  {
+    kw:["سددت 15 سنة وتركت","تركت التسديد","وفاة بعد التوقف","المادة 30"],
+    ans:`<span class="tag">🕊️ الوفاة بعد التوقف عن التسديد — المادة 30/ثانيًا</span>
+إذا سددت <strong>15 سنة</strong> ثم تركت التسديد، وتوفيت لاحقًا — <strong>نعم</strong>، يستحق ذووك راتبًا تقاعديًا وفق المادة (30/ثانيًا).`
+  },
+  {
+    kw:["15 سنة أطلع تقاعد","خدمة 15 سنة هل يكفي","15 سنة هل يصير"],
+    ans:`<span class="tag">📅 خدمة 15 سنة وشروط التقاعد</span>
+نعم، بخدمة 15 سنة تستطيع التقاعد بعد:<br>
+• <strong>إكمال عمر 63 سنة</strong> للرجل<br>
+• <strong>إكمال عمر 58 سنة</strong> للمرأة`
+  },
+  {
+    kw:["هويات","بطاقة مشترك","هوية الضمان","إصدار هويات","المادة 26"],
+    ans:`<span class="tag">🪪 هويات مشتركي الضمان — المادة 26</span>
+نصّت المادة (26) من قانون الضمان على إصدار هويات للمشتركين، لكن حتى الآن (2025/12) <strong>لم يتم إصدارها بعد.</strong>`
+  },
+  {
+    kw:["رقم الضمان","أعرف رقمي","رقم اشتراكي","أين رقم الضمان"],
+    ans:`<span class="tag">🔢 كيف تعرف رقم ضمانك؟</span>
+رقم الضمان يظهر في <strong>وصل الدفع</strong> بعد كل عملية دفع، ويحتوي على:<br>
+• رقم الضمان<br>
+• اسمك الكامل<br>
+• تفاصيل الاشتراك والفئة`
+  },
+  {
+    kw:["تأمين صحي","مشمول بالصحة","صحة","تغطية صحية"],
+    ans:`<span class="tag">🏥 التأمين الصحي</span>
+حاليًا، مشترك الضمان الاختياري <strong>لا يشمله التأمين الصحي.</strong>`
+  },
+  {
+    kw:["أعلى راتب","أكبر راتب","شگد أعلى راتب","راتب 1400000","الفئة 15"],
+    ans:`<span class="tag">💰 أعلى راتب تقاعدي ممكن</span>
+حاليًا <strong>1,400,000 دينار</strong> شهريًا، بشروط:<br>
+• خدمة <strong>32 سنة</strong> (384 شهر مسدد اشتراك)<br>
+• متوسط أجر لآخر 5 سنوات = <strong>1,750,000 دينار</strong> (الفئة 15)`
+  },
+  {
+    kw:["خارج العراق","مغترب","أعيش خارج","عايش بره العراق"],
+    ans:`<span class="tag">🌍 الاشتراك من خارج العراق</span>
+<strong>نعم</strong>، يحق لمن يقيم خارج العراق التقديم على الضمان الاختياري إلكترونيًا.`
+  },
+  {
+    kw:["أعلى فئة ودفعت","الراتب يعتمد","اشتركت بأعلى فئة","المادة 35"],
+    ans:`<span class="tag">📊 راتبك عند الاشتراك بأعلى فئة — المادة 35</span>
+الراتب التقاعدي يعتمد على:<br>
+• <strong>عدد أشهر الخدمة</strong><br>
+• <strong>متوسط الأجر لآخر 5 سنوات</strong><br><br>
+وفق المعادلة:<br>
+<strong>الراتب = 2.5% × متوسط الأجر الشهري (آخر 5 سنوات) × (عدد أشهر الخدمة ÷ 12)</strong>`
+  },
+  {
+    kw:["كيف أدفع","شلون أدفع","دفع الاشتراك","حسابي الشخصي"],
+    ans:`<span class="tag">💳 طريقة دفع الاشتراك</span>
+عن طريق <strong>حسابك الشخصي</strong> في منظومة الضمان الرقمية، باستخدام بطاقات الدفع الإلكتروني (ماستركارد / فيزا).<br><br>
+🔗 <a class="lnk" href="https://www.user.rss.gov.iq/login" target="_blank">الدخول إلى المنظومة</a>`
+  },
+  {
+    kw:["أكبر عمر","الحد الأعلى للعمر","عمر 50 سنة","حد العمر"],
+    ans:`<span class="tag">⏳ الحد الأعلى لعمر التسجيل</span>
+أكبر عمر هو <strong>50 سنة</strong>، غير أن العمر يصبح مفتوحًا إذا كان لديك خدمة لا تقل عن <strong>3 سنوات</strong> مضمونة أو حكومية مدنية.`
+  },
+  {
+    kw:["فئة 5 أريد أنزل","تخفيض الفئة","أنزل من فئة","فئة 5 تغيير"],
+    ans:`<span class="tag">🔄 تغيير الفئة إلى أعلى أو أدنى</span>
+• إذا <strong>لم تسدد بعد</strong>: يحق لك تغيير الفئة لأي فئة تريد.<br>
+• إذا <strong>سددت</strong>: يحق لك الصعود إلى الفئة التالية فقط، كل <strong>12 شهرًا</strong>.<br>
+• <strong>لا يمكن النزول</strong> إلى فئة أقل بعد الدفع.`
+  },
+  {
+    kw:["دفع مقدم","مقدماً","أدفع مسبقاً","دفع مسبق"],
+    ans:`<span class="tag">✅ الدفع المقدم</span>
+نعم، يحق لك دفع الاشتراك <strong>مقدمًا</strong> من تاريخ الانتساب حتى نهاية السنة.`
+  },
+  {
+    kw:["فئة 3 إلى فئة 10","قفز الفئات","مباشرة إلى فئة 15","فئة 3 فئة 10"],
+    ans:`<span class="tag">🚫 لا يجوز القفز بين الفئات</span>
+يحق لك تغيير الفئة كل <strong>12 شهر</strong>، لكن <strong>بالتدرج فقط</strong> (من فئة إلى الفئة التي تليها مباشرة).<br><br>
+❌ لا يجوز الانتقال من الفئة 3 مباشرة إلى الفئة 10 أو 15.`
+  },
+  {
+    kw:["احتساب الراتب","كم راتب","معادلة الراتب","2.5%","راتب تقاعدي"],
+    ans:`<span class="tag">💵 احتساب الراتب التقاعدي</span>
+<strong>المعادلة:</strong><br>
+<strong>الراتب = 2.5% × متوسط الأجر الشهري (آخر 5 سنوات) × (عدد أشهر الخدمة ÷ 12)</strong><br><br>
+<strong>مثال:</strong><br>
+متوسط أجر = 500,000 دينار، خدمة = 30 سنة (360 شهر)<br>
+الراتب = 2.5% × 500,000 × 30 = <strong>375,000 دينار شهريًا</strong>`
+  }
+];
+
+// ═══════════════════════════════════════════
+// المتغيرات
+// ═══════════════════════════════════════════
+let files=[], busy=false, messages=[];
+
+// ═══════════════════════════════════════════
+// الدوال المساعدة
+// ═══════════════════════════════════════════
+const T=()=>new Date().toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+const $=id=>document.getElementById(id);
+
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,130)+'px'}
+
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+
+function toggleSB(){
+  const s=$('sb'),o=$('ov');
+  s.classList.toggle('open');
+  o.style.display=s.classList.contains('open')?'block':'none';
+}
+
+function hideWS(){const w=$('ws');if(w)w.remove()}
+
+function addMsg(role,html){
+  messages.push({role,html});
+  try{localStorage.setItem('chat',JSON.stringify(messages));}catch(e){}
+  const area=$('msgs');
+  const d=document.createElement('div');
+  d.className='mrow '+role;
+  const ico=role==='bot'?'🛡️':'👤';
+  d.innerHTML=`<div class="ava ${role}">${ico}</div><div><div class="bub ${role}">${html}</div><div class="btime">${T()}</div></div>`;
+  area.appendChild(d);
+  area.scrollTop=area.scrollHeight;
+}
+
+function showTyping(){
+  const area=$('msgs');
+  const d=document.createElement('div');
+  d.className='mrow bot';d.id='ty';
+  d.innerHTML=`<div class="ava bot">🛡️</div><div><div class="bub bot"><div class="typing"><span></span><span></span><span></span></div></div></div>`;
+  area.appendChild(d);
+  area.scrollTop=area.scrollHeight;
+}
+function rmTyping(){const e=$('ty');if(e)e.remove()}
+
+// ═══════════════════════════════════════════
+// البحث في قاعدة البيانات
+// ═══════════════════════════════════════════
+function findAns(q){
+  const lq=q.toLowerCase();
+  let best=null,top=0;
+  for(const item of DB){
+    let sc=0;
+    for(const k of item.kw){
+      if(lq.includes(k)||k.includes(lq)) sc+=3;
+      const words=k.split(' ');
+      for(const w of words){
+        if(w.length>2&&lq.includes(w)) sc+=1;
+      }
+    }
+    if(sc>top){top=sc;best=item}
+  }
+  return top>0?best:null;
+}
+
+// ═══════════════════════════════════════════
+// الإرسال
+// ═══════════════════════════════════════════
+async function send(){
+  if(busy)return;
+  const inp=$('mi');
+  const txt=inp.value.trim();
+  if(!txt&&files.length===0)return;
+
+  // حد طول الرسالة
+  if(txt.length>500){
+    addMsg('bot','⚠️ سؤالك طويل جداً، اختصره شوية حتى أجاوبك بشكل أدق 😊');
+    return;
+  }
+
+  hideWS();
+
+  // حفظ نسخة من الملفات قبل المسح
+  const attachedFiles=[...files];
+
+  let dm=txt||'📎 ملف مرفق';
+  if(attachedFiles.length) dm+='<br><small style="opacity:.7">'+attachedFiles.map(f=>'📎 '+f.name).join(', ')+'</small>';
+  addMsg('user',dm);
+
+  inp.value='';inp.style.height='auto';
+  files=[];$('fp').innerHTML='';
+
+  busy=true;$('sb2').disabled=true;
+  showTyping();
+
+  const disc=`<div class="disc">⚠️ هذه المعلومات للاسترشاد فقط، يُنصح بمراجعة المؤسسة العامة للضمان الاجتماعي للاستفسار الرسمي.</div>`;
+
+  // إضافة اسم الملفات للنص
+  let fullTxt=txt;
+  if(attachedFiles.length){
+    fullTxt+='\n\n(المستخدم أرفق: '+attachedFiles.map(f=>f.name).join(', ')+')';
+  }
+
+  // 1. ابحث في قاعدة البيانات أولاً
+  const found=findAns(txt);
+
+  if(found){
+    await new Promise(r=>setTimeout(r,350));
+    rmTyping();
+    addMsg('bot',found.ans+disc);
+  } else {
+    // 2. إذا ما لقيت → اسأل الذكاء الاصطناعي مع كامل سياق المحادثة
+    try{
+      const SYSTEM=`أنت مساعد ذكي متخصص في الضمان الاجتماعي العراقي وقانون التقاعد الاختياري رقم 18 لسنة 2023.
+مهمتك الإجابة على أسئلة المواطنين بشكل واضح ومختصر باللغة العربية.
+إذا السؤال خارج نطاق الضمان الاجتماعي العراقي، اعتذر بلطف وأعِد التوجيه.
+أجب دائماً باللغة العربية الواضحة، وأشر للمادة القانونية إن أمكن.`;
+
+      // بناء سياق المحادثة (آخر 10 رسائل كنص نظيف)
+      const ctxMsgs = messages.slice(-10).map(m=>({
+        role: m.role==='user'?'user':'assistant',
+        content: m.html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()
+      }));
+      // تأكد آخر رسالة هي السؤال الحالي
+      if(!ctxMsgs.length||ctxMsgs[ctxMsgs.length-1].content!==fullTxt){
+        ctxMsgs.push({role:'user',content:fullTxt});
+      }
+
+      const res=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "x-api-key":"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", // ← ضع مفتاحك هنا إذا عندك
+          "anthropic-version":"2023-06-01",
+          "anthropic-dangerous-direct-browser-access":"true"
+        },
+        body:JSON.stringify({
+          model:"claude-sonnet-4-20250514",
+          max_tokens:800,
+          system:SYSTEM,
+          messages:ctxMsgs
+        })
+      });
+      const data=await res.json();
+      const reply=data.content?.map(b=>b.text||'').join('')||'';
+      rmTyping();
+      if(reply){
+        const formatted=reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+        addMsg('bot',formatted+disc);
+      } else {
+        throw new Error('empty');
+      }
+    }catch(e){
+      rmTyping();
+      addMsg('bot',`<span class="tag">🤖 لم أجد جواباً دقيقاً</span><br>
+حاول إعادة صياغة السؤال أو اسأل بطريقة أخرى.<br><br>
+يمكنك أيضاً:<br>
+• الاتصال بالرقم الموحد <strong>1900</strong><br>
+• زيارة موقع المؤسسة: <a class="lnk" href="https://www.rss.gov.iq" target="_blank">rss.gov.iq</a>${disc}`);
+    }
+  }
+
+  busy=false;$('sb2').disabled=false;
+}
+
+function ask(txt){
+  $('mi').value=txt;
+  send();
+}
+
+// ═══════════════════════════════════════════
+// محادثة جديدة
+// ═══════════════════════════════════════════
+function newChat(){
+  const area=$('msgs');
+  area.innerHTML='';
+  files=[];$('fp').innerHTML='';
+  messages=[];
+  try{localStorage.removeItem('chat');}catch(e){}
+
+  const d=document.createElement('div');
+  d.id='ws';d.className='welcome';
+  d.innerHTML=`
+    <div class="w-ico">⚖️</div>
+    <h1 class="w-title">الضمان الاختياري | المساعد الذكي</h1>
+    <p class="w-sub">اسأل عن أي شيء: شروط التسجيل، نسب الاشتراك، سن التقاعد، حقوق الورثة، وكيفية الدفع.</p>
+    <div class="sug-grid">
+      <div class="sug" onclick="ask('ما هي شروط الانضمام إلى التقاعد والضمان الاختياري؟')"><div class="si">📋</div><div class="st"><strong>شروط الاشتراك</strong>من يحق له التسجيل وما هي الشروط؟</div></div>
+      <div class="sug" onclick="ask('كم نسبة الاشتراك ومن يتحملها؟')"><div class="si">💰</div><div class="st"><strong>نسبة الاشتراك</strong>كم تدفع وما هي مساهمة الدولة؟</div></div>
+      <div class="sug" onclick="ask('متى أستحق التقاعد حسب القانون؟')"><div class="si">📅</div><div class="st"><strong>سن التقاعد</strong>الشروط التفصيلية للرجال والنساء</div></div>
+      <div class="sug" onclick="ask('من يستحق راتب المتوفى من الورثة؟')"><div class="si">👨‍👩‍👧</div><div class="st"><strong>حقوق الورثة</strong>من يرث الراتب التقاعدي عند الوفاة؟</div></div>
+    </div>`;
+  area.appendChild(d);
+
+  // سجل المحادثات
+  const hist=$('hist');
+  document.querySelectorAll('.hi').forEach(i=>i.classList.remove('on'));
+  const ni=document.createElement('div');
+  ni.className='hi on';
+  ni.textContent='📌 محادثة جديدة';
+  ni.onclick=()=>loadChat(ni);
+  hist.insertBefore(ni,hist.firstChild);
+
+  if(window.innerWidth<=768) toggleSB();
+}
+
+function loadChat(el){
+  document.querySelectorAll('.hi').forEach(i=>i.classList.remove('on'));
+  el.classList.add('on');
+  if(window.innerWidth<=768) toggleSB();
+}
+
+// ═══════════════════════════════════════════
+// الملفات المرفقة
+// ═══════════════════════════════════════════
+function attachFile(e){
+  files=[...files,...Array.from(e.target.files)];
+  renderFiles();
+}
+function renderFiles(){
+  $('fp').innerHTML=files.map((f,i)=>
+    `<div class="chip">📎 ${f.name.substring(0,22)}${f.name.length>22?'...':''} <button onclick="rmFile(${i})">×</button></div>`
+  ).join('');
+}
+function rmFile(i){files.splice(i,1);renderFiles()}
+
+// ═══════════════════════════════════════════
+// استعادة المحادثة عند تحميل الصفحة
+// ═══════════════════════════════════════════
+window.onload=()=>{
+  try{
+    const saved=JSON.parse(localStorage.getItem('chat'));
+    if(saved&&saved.length>0){
+      messages=saved;
+      const area=$('msgs');
+      // أزل شاشة الترحيب إذا في محادثة محفوظة
+      const ws=$('ws');if(ws)ws.remove();
+      for(const m of messages){
+        const d=document.createElement('div');
+        d.className='mrow '+m.role;
+        const ico=m.role==='bot'?'🛡️':'👤';
+        d.innerHTML=`<div class="ava ${m.role}">${ico}</div><div><div class="bub ${m.role}">${m.html}</div><div class="btime">${T()}</div></div>`;
+        area.appendChild(d);
+      }
+      area.scrollTop=area.scrollHeight;
+    }
+  }catch(e){}
+};
+</script>
+</body>
+</html>"
