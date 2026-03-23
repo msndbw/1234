@@ -725,19 +725,10 @@ async function send(){
   const txt=inp.value.trim();
   if(!txt&&files.length===0)return;
 
-  // حد طول الرسالة
-  if(txt.length>500){
-    addMsg('bot','⚠️ سؤالك طويل جداً، اختصره شوية حتى أجاوبك بشكل أدق 😊');
-    return;
-  }
-
   hideWS();
 
-  // حفظ نسخة من الملفات قبل المسح
-  const attachedFiles=[...files];
-
   let dm=txt||'📎 ملف مرفق';
-  if(attachedFiles.length) dm+='<br><small style="opacity:.7">'+attachedFiles.map(f=>'📎 '+f.name).join(', ')+'</small>';
+  if(files.length) dm+='<br><small style="opacity:.7">'+files.map(f=>'📎 '+f.name).join(', ')+'</small>';
   addMsg('user',dm);
 
   inp.value='';inp.style.height='auto';
@@ -748,10 +739,10 @@ async function send(){
 
   const disc=`<div class="disc">⚠️ هذه المعلومات للاسترشاد فقط، يُنصح بمراجعة المؤسسة العامة للضمان الاجتماعي للاستفسار الرسمي.</div>`;
 
-  // إضافة اسم الملفات للنص
+  // إضافة اسم الملفات للنص إذا كانت مرفقة
   let fullTxt=txt;
-  if(attachedFiles.length){
-    fullTxt+='\n\n(المستخدم أرفق: '+attachedFiles.map(f=>f.name).join(', ')+')';
+  if(files.length){
+    fullTxt+='\n\n(المستخدم أرفق الملفات التالية: '+files.map(f=>f.name).join(', ')+')';
   }
 
   // 1. ابحث في قاعدة البيانات أولاً
@@ -772,7 +763,7 @@ async function send(){
       // بناء سياق المحادثة (آخر 10 رسائل كنص نظيف)
       const ctxMsgs = messages.slice(-10).map(m=>({
         role: m.role==='user'?'user':'assistant',
-        content: m.html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()
+        content: m.html.replace(/<[^>]+>/g,'').trim()
       }));
       // تأكد آخر رسالة هي السؤال الحالي
       if(!ctxMsgs.length||ctxMsgs[ctxMsgs.length-1].content!==fullTxt){
@@ -783,9 +774,8 @@ async function send(){
         method:"POST",
         headers:{
           "Content-Type":"application/json",
-          "x-api-key":"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", // ← ضع مفتاحك هنا إذا عندك
-          "anthropic-version":"2023-06-01",
-          "anthropic-dangerous-direct-browser-access":"true"
+          "x-api-key":"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",
+          "anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"
         },
         body:JSON.stringify({
           model:"claude-sonnet-4-20250514",
@@ -805,9 +795,9 @@ async function send(){
       }
     }catch(e){
       rmTyping();
-      addMsg('bot',`<span class="tag">🤖 لم أجد جواباً دقيقاً</span><br>
-حاول إعادة صياغة السؤال أو اسأل بطريقة أخرى.<br><br>
-يمكنك أيضاً:<br>
+      addMsg('bot',`<span class="tag">❓ لم أجد إجابة</span><br>
+⚠️ تعذّر الاتصال بالذكاء الاصطناعي، يمكنك:<br>
+• إعادة صياغة السؤال بكلمات مختلفة<br>
 • الاتصال بالرقم الموحد <strong>1900</strong><br>
 • زيارة موقع المؤسسة: <a class="lnk" href="https://www.rss.gov.iq" target="_blank">rss.gov.iq</a>${disc}`);
     }
